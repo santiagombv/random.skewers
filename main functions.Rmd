@@ -5,7 +5,7 @@ output: pdf_document
 ---
 
 This is a pdf version of an R Markdown, Original routines can be downloaded from https://github.com/santiagombv/random.skewers    
-Random skewers is a method that compares the evolutionary response to selection of two variance-covariance matrices, as a measure of matrix similarity. A large number of random selection vectors, called random skewers, is simultaneously applied to both matrices and their response to selection vectors are compared. Given any fixed selection vector, if two matrices are similar, the orientation and magnitude of the response vectors should also be similar.We followed the description of the method in Marroig and Cheverud (2007) to build the present routine.  
+Random skewers is a method that compares the evolutionary response to selection of two variance-covariance matrices, as a measure of matrix similarity. A large number of random selection vectors, called random skewers, is simultaneously applied to both matrices and their response to selection vectors are compared. Given any fixed selection vector, if two matrices are similar, the orientation and magnitude of the response vectors should also be similar. We followed the description of the method in Marroig and Cheverud (2007) to build the present routine.  
 
 ### The function *random.skewers*  
 
