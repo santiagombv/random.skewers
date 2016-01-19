@@ -5,8 +5,7 @@ output: pdf_document
 ---
 
 This is a pdf version of an R Markdown, Original routines can be downloaded from https://github.com/santiagombv/random.skewers    
-Random skewers is a method that compares the evolutionary response to selection of two variance-covariance matrices, as a measure of matrix similarity. A large number of random selection vectors, called random skewers, is simultaneously applied to both matrices and their response to selection vectors are compared. Given any fixed selection vector, if two matrices are similar, the orientation and magnitude of the response vectors should also be similar.  
-We followed the description of the method in Marroig and Cheverud (2007) to build the present routine.  
+Random skewers is a method that compares the evolutionary response to selection of two variance-covariance matrices, as a measure of matrix similarity. A large number of random selection vectors, called random skewers, is simultaneously applied to both matrices and their response to selection vectors are compared. Given any fixed selection vector, if two matrices are similar, the orientation and magnitude of the response vectors should also be similar.We followed the description of the method in Marroig and Cheverud (2007) to build the present routine.  
 
 ### The function *random.skewers*  
 
@@ -16,8 +15,8 @@ We followed the description of the method in Marroig and Cheverud (2007) to buil
 # rep is the number of random skewers.
 
 # Output.
-# The output is a two-column data frame. The column *ratio* is the response vectors'
-# length ratio between G1 nd G2.The column *correlation* contains a measures the
+# The output is a two-column data frame. The column ratio is the response vectors'
+# length ratio between G1 nd G2.The column correlation contains measures of the
 # co-linearity of the response vectors in the multivariate morphometric space, equal
 # to the cosine of the angle between response vectors.
 
@@ -35,12 +34,69 @@ random.skewers<-function(G1, G2, rep){
     dz2 <- G2%*%RS3
     res <- c(sum(dz1^2)/sum(dz2^2), 
              (t(dz1)%*%dz2)/sqrt((t(dz1)%*%dz1)*(t(dz2)%*%dz2)))
-    res
+    return(res)
   }
   RES <- data.frame(t(replicate(rep, rd.sk(G1=G1, G2=G2))))
   colnames(RES) <- c("ratio", "correlation")
-  RES
+  return(RES)
 }
 
 ```
+
+### The function *sim.vec.cor*
+```{r}
+# Arguments.
+# k is the number of traits in the random skewer analysis.
+# rep is the number of simmulated vector pairs.
+
+# Output.
+# A vector of length rep containing the correlations between random vectors. 
+
+sim.vec.cor <- function(k, rep){
+  vec.cor <- function(k){
+     RS1 <- runif(n=k)*sample(c(-1,1), size = k, replace = TRUE)
+     RS1 <- RS1/sqrt((t(RS1)%*%RS1)) 
+     RS2 <- runif(n=k)*sample(c(-1,1), size = k, replace = TRUE)
+     RS2 <- RS2/sqrt((t(RS2)%*%RS2))
+     ang <- acos(t(RS1)%*%RS2/sqrt((t(RS1)%*%RS1)*(t(RS2)%*%RS2)))
+     res <- ifelse(ang > pi/2, cos(pi-ang), cos(ang))
+     return(res)
+  }
+  replicate(rep, vec.cor(k))
+}
+
+```
+
+### Worked example.
+```{r, eval = FALSE}
+# Given two covariance matrices, M1 and M2.
+M1 <- matrix(c(0.011, 0.003, 0.009, 0.008, 0.002, 0.005,
+               0.003, 0.010, 0.004, 0.006, 0.002, 0.006,
+               0.009, 0.004, 0.021, 0.007, 0.001, 0.008,
+               0.008, 0.006, 0.007, 0.054, -0.018, 0.007,
+               0.002, 0.002, 0.001, -0.018, 0.026, -0.001,
+               0.005, 0.006, 0.008, 0.007, -0.001, 0.010), 6, 6)
+
+M2 <- matrix(c(0.008, -0.001, 0.008, -0.003, 0.001, 0.001,
+               -0.001, 0.014, 0.003, -0.001, 0.002, -0.004,
+               0.008, 0.003, 0.021, 0.002, 0.002, 0.001,
+               -0.003, -0.001, 0.002, 0.013, 0.003, -0.001,
+               0.001, 0.002, 0.002, 0.003, 0.012, 0.001,
+               0.001, -0.004, 0.001, -0.001, 0.001, 0.007), 6, 6)
+
+# Create random skewers.
+RS <- random.skewers(G1 = M1, G2 = M2, rep = 1000)
+
+# Obtain mean response vectors' length ratio.
+mean(RS$ratio)
+
+# Obtain mean response vectors' correlation.
+mean(RS$correlation)
+
+# Estimate the 95% percentile of the expected correlation between random vectors.
+SC <- sim.vec.cor(k = 6, rep = 1000)
+quantile(SC, probs = 0.95)
+
+```
+
 
