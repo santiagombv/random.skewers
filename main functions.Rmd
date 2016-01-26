@@ -99,4 +99,6 @@ quantile(SC, probs = 0.95)
 
 ```
 
+###References
+Cheverud, J.M. & Marroig, G. 2007. Comparing covariance matrices: random skewers method compared to  the common principal components model. *Genet. Molec. Biol.* 30: 461-469.
 
