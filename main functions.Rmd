@@ -1,6 +1,6 @@
 ---
 title: "Supplementary Material: Drift effects on the multivariate floral phenotype of *Calceolaria polyrhiza* during a postglacial expansion in Patagonia"
-author: C. Maubecín, A. Cosacov, J. Fornoni, A. N. Sérsic & S. Benitez-Vieyra.
+author: C.C. Maubecin, A. Cosacov, J. Fornoni, A. N. Sérsic & S. Benitez-Vieyra.
 output: pdf_document
 ---
 
